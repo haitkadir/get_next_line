@@ -9,10 +9,10 @@ int main(){
     // char *str1;
 
     fd = open("file.txt", O_RDONLY);
-    int i = 2;
+    int i = 1;
     while(i--){
         str = get_next_line(fd);
-        printf("%s\n", str);
+        printf("%s", str);
     }
     // str1 = get_next_line(fd);
     // printf("%s", str1);
