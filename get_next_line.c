@@ -11,6 +11,59 @@ static int if_contean(char *str, char c)
     
     return (0);
 }
+// static void(char )
+// {
+//         i = 0;
+//         read_return = read(fd, buf, BUFFER_SIZE);
+//         if(read_return == 0 && !after_n_line){
+//             return (line);
+//         }
+//         buf[read_return] = '\0';
+//         while(buf[i] && buf[i] != '\n')
+//             i++;
+//         temp = ft_substr(buf, 0, i);
+//         if(after_n_line){
+//             // printf("%s\n", after_n_line);
+//             line = ft_strjoin(line, after_n_line);
+//             free(after_n_line);
+//             after_n_line = NULL;
+//         }
+//         if(if_contean(buf, '\n'))
+//         {
+//             after_n_line = ft_strdup(ft_strchr(buf, '\n'));
+//             read_return = 0;
+//         }
+        
+//         line = ft_strjoin(line, temp);
+// }
+/*
+static void get_before_n_line(char *buf, char *temp)
+{
+    int i;
+
+    i = 0;
+    while(buf[i] && buf[i] != '\n')
+        i++;
+    temp = ft_substr(buf, 0, (ft_strchr(buf, '\n') - buf) + 1);
+}*/
+static void cndtion1(char *line, char *after_n_line)
+{
+    if(after_n_line){
+        line = ft_strjoin(line, after_n_line);
+        free(after_n_line);
+        after_n_line = NULL;
+    }
+}
+
+static void cndtion2(char *buf, char *after_n_line, int read_return)
+{
+    if(if_contean(buf, '\n'))
+    {
+        after_n_line = ft_strdup(ft_strchr(buf, '\n') + 1);
+        read_return = 0;
+    }
+}
+
 
 char *get_next_line(int fd)
 {
@@ -19,34 +72,19 @@ char *get_next_line(int fd)
     char *line;
     static char *after_n_line;
     int read_return;
-    int i;
 
-    buf = (char *)ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-    line = (char *)ft_calloc(1, sizeof(char));
+    line = buf = (char *)ft_calloc(BUFFER_SIZE + 1, sizeof(char));
     read_return = 1;
     while(read_return)
     {
-        i = 0;
         read_return = read(fd, buf, BUFFER_SIZE);
         if(read_return == 0 && !after_n_line){
             return (line);
         }
         buf[read_return] = '\0';
-        while(buf[i] && buf[i] != '\n')
-            i++;
-        temp = ft_substr(buf, 0, i);
-        if(after_n_line){
-            // printf("%s\n", after_n_line);
-            line = ft_strjoin(line, after_n_line);
-            free(after_n_line);
-            after_n_line = NULL;
-        }
-        if(if_contean(buf, '\n'))
-        {
-            after_n_line = ft_strdup(ft_strchr(buf, '\n'));
-            read_return = 0;
-        }
-        
+        temp = ft_substr(buf, 0, (ft_strchr(buf, '\n') - buf) + 1);
+        cndtion1(line, after_n_line);
+        cndtion2(buf, after_n_line, read_return);
         line = ft_strjoin(line, temp);
     }
     if(!line)

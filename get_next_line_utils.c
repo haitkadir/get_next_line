@@ -91,18 +91,6 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-void	ft_bzero(void *s, size_t n)
-{
-	char	*str;
-
-	str = (char *)s;
-	while (n > 0)
-	{
-		*str++ = '\0';
-		n--;
-	}
-}
-
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	size_t	i;
