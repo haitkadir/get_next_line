@@ -14,34 +14,40 @@ static int if_contean(char *str, char c)
 
 char *get_next_line(int fd)
 {
-    char buf[BUFFER_SIZE + 1];
+    char *buf;
     char *temp;
     char *line;
     static char *after_n_line;
     int read_return;
     int i;
 
+    buf = (char *)ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+    line = (char *)ft_calloc(1, sizeof(char));
     read_return = 1;
-    i = 0;
     while(read_return)
     {
+        i = 0;
         read_return = read(fd, buf, BUFFER_SIZE);
-        buf[BUFFER_SIZE] = '\0';
+        if(read_return == 0 && !after_n_line){
+            return (line);
+        }
+        buf[read_return] = '\0';
         while(buf[i] && buf[i] != '\n')
             i++;
         temp = ft_substr(buf, 0, i);
+        if(after_n_line){
+            // printf("%s\n", after_n_line);
+            line = ft_strjoin(line, after_n_line);
+            free(after_n_line);
+            after_n_line = NULL;
+        }
         if(if_contean(buf, '\n'))
         {
             after_n_line = ft_strdup(ft_strchr(buf, '\n'));
             read_return = 0;
         }
-        else
-        {
-            line = ft_strjoin(temp, after_n_line);
-            free(temp);
-            free(after_n_line);
-        }
-        temp = line;
+        
+        line = ft_strjoin(line, temp);
     }
     if(!line)
         return (0);

@@ -9,7 +9,7 @@ int main(){
     // char *str1;
 
     fd = open("file.txt", O_RDONLY);
-    int i = 1;
+    int i = 10000000;
     while(i--){
         str = get_next_line(fd);
         printf("%s", str);
