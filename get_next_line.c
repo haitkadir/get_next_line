@@ -35,38 +35,55 @@ static int cndtion2(char *buf, char *after_n_line, int read_return)
 char *get_next_line(int fd)
 {
     char *buf;
-    char *temp;
     char *line;
-    static char *after_n_line;
-    int read_return;
+    char *temp;
+    static char *statiq;
+    int ret;
 
-    buf = (char *)ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-    line = (char *)ft_calloc(1, sizeof(char));
-    read_return = 1;
-    while(read_return)
+    statiq = (char *)ft_calloc(1, sizeof(char));
+    if (fd >= 0)
     {
-        read_return = read(fd, buf, BUFFER_SIZE);
-        if(read_return == 0 && !after_n_line){
-            return (line);
-        }
-        buf[read_return] = '\0';
-        temp = ft_substr(buf, 0, (ft_strchr(buf, '\n') - buf) + 1);
-        if(after_n_line){
-            line = ft_strjoin(line, after_n_line);
-            free(after_n_line);
-            after_n_line = NULL;
-        }
-        //cndtion1(line, after_n_line);
-        if(if_contean(buf, '\n'))
+        buf = (char *)ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+        temp = line = NULL;
+        ret = 1;
+        while(ret)
         {
-            after_n_line = ft_strdup(ft_strchr(buf, '\n') + 1);
-            read_return = 0;
+            if (statiq && statiq[0] != '\0' && (if_contean(statiq, '\n') || ret == 0))
+            {
+                if (if_contean(statiq, '\n'))
+                {
+                    temp = ft_strdup(statiq);
+                    ft_bzero((ft_strchr(temp, '\n') + 1), ft_strlen((ft_strchr(temp, '\n') + 1)));
+                    line = ft_strdup(temp);
+                    free(temp);
+                    statiq = ft_strdup((ft_strchr(statiq, '\n') + 1));
+                    break ;
+                }
+                else
+                {
+                    line = ft_strdup(statiq);
+                    if(statiq)
+                        ft_bzero(statiq, ft_strlen(statiq));
+                    break ;
+                }
+            }
+            else
+            {
+                ret = read(fd, buf, BUFFER_SIZE);
+                buf[BUFFER_SIZE] = '\0';
+                if(ft_strlen(buf))
+                {
+                    temp = ft_strjoin(statiq, buf);
+                    free(statiq);
+                    statiq = ft_strdup(temp);
+                    free(temp);
+                    temp = NULL; 
+                    ft_bzero(buf, BUFFER_SIZE);
+                }
+            }
         }
-        //read_return = cndtion2(buf, after_n_line, read_return);
-        line = ft_strjoin(line, temp);
     }
-    if(!line)
-        return (0);
+    free (buf);
     return (line);
 }
 
