@@ -131,3 +131,20 @@ void	ft_bzero(void *s, size_t n)
 		n--;
 	}
 }
+
+void	*ft_memcpy(void *dst, const void *src, size_t n)
+{
+	unsigned char	*d;
+	unsigned char	*s;
+
+	d = (unsigned char *)dst;
+	s = (unsigned char *)src;
+	if (!s && !d)
+		return (0);
+	while (n > 0)
+	{
+		*d++ = *s++;
+		n--;
+	}
+	return (dst);
+}

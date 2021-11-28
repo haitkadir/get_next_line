@@ -22,52 +22,59 @@ char *get_next_line(int fd)
     static char *statiq;
     int ret;
 
-    buf = (char *)ft_calloc(BUFFER_SIZE + 1, sizeof(char));
     temp = NULL;
     line = NULL;
+    buf = (char *)ft_calloc(BUFFER_SIZE + 1, sizeof(char));
     if (fd >= 0)
     {
         while(!if_contean(statiq, '\n'))
         {
             ret = read(fd, buf, BUFFER_SIZE);
-            if (ret <= 0)
+            if (ret <= 0){
                 break ;
+            }
+
             if(ft_strlen(buf))
             {
                 if(statiq)
                 {
                     temp = ft_strjoin(statiq, buf);
                     free(statiq);
-                    statiq = 0;
+                    statiq = NULL;
                 }
-                else
+                else{
                     temp = ft_strdup(buf);
+                }
                 statiq = ft_strdup(temp);
                 free(temp);
                 temp = NULL;
                 ft_bzero(buf, BUFFER_SIZE);
             }
         }
+
         if ((statiq && statiq[0] != '\0'))
         {
-            if (if_contean(statiq, '\n'))
+            if (if_contean(statiq, '\n') && ft_strchr(statiq, '\n') + 1)
             {
                 temp = ft_strdup(statiq);
                 free(statiq);
+                statiq = NULL;
                 statiq = ft_strdup((ft_strchr(temp, '\n') + 1));
-                ft_bzero((ft_strchr(temp, '\n') + 1), ft_strlen((ft_strchr(temp, '\n') + 1)));
+                ft_bzero((ft_strchr(temp, '\n') + 1), \
+                    ft_strlen((ft_strchr(temp, '\n') + 1)));
                 line = ft_strdup(temp);
                 free(temp);
+                temp = NULL;
             }
             else if (ret == 0)
             {
                 line = ft_strdup(statiq);
-                if(statiq)
-                    ft_bzero(statiq, ft_strlen(statiq));
+                free(statiq);
+                statiq = NULL;
             }
         }
     }
-    if (buf)
-        free (buf);
+
+    free (buf);
     return (line);
 }
