@@ -24,6 +24,8 @@ char	*ft_strchr(const char *s, int c)
 	char	*str;
 	char	ch;
 
+	if (!s)
+		return (0);
 	str = (char *)s;
 	ch = (char)c;
 	i = 0;
