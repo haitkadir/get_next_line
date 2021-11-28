@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: haitkadi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/28 21:52:23 by haitkadi          #+#    #+#             */
+/*   Updated: 2021/11/28 21:52:26 by haitkadi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
 #include "get_next_line.h"
 
 void	*ft_calloc(size_t count, size_t size)
@@ -93,60 +106,3 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	size_t	i;
-	size_t	j;
-	char	*str;
-
-	if (!s)
-		return (0);
-	else if (start >= ft_strlen(s))
-		return (ft_calloc(1, sizeof(char *)));
-	i = 0;
-	j = start;
-	while (s[j++] && i < len)
-		i++;
-	len = i;
-	str = (char *)malloc(sizeof(char) * len + 1);
-	if (!str)
-		return (0);
-	i = 0;
-	while (s[start] && i < len)
-	{
-		str[i] = s[start];
-		i++;
-		start++;
-	}
-	str[i] = 0;
-	return (str);
-}
-
-void	ft_bzero(void *s, size_t n)
-{
-	char	*str;
-
-	str = (char *)s;
-	while (n > 0)
-	{
-		*str++ = '\0';
-		n--;
-	}
-}
-
-void	*ft_memcpy(void *dst, const void *src, size_t n)
-{
-	unsigned char	*d;
-	unsigned char	*s;
-
-	d = (unsigned char *)dst;
-	s = (unsigned char *)src;
-	if (!s && !d)
-		return (0);
-	while (n > 0)
-	{
-		*d++ = *s++;
-		n--;
-	}
-	return (dst);
-}

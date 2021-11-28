@@ -1,8 +1,83 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: haitkadi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/28 21:37:16 by haitkadi          #+#    #+#             */
+/*   Updated: 2021/11/28 21:37:21 by haitkadi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "get_next_line.h"
 
-char *get_next_line(int fd)
+void	ft_bzero(void *s, size_t n)
 {
-    char *buf;
+	char	*str;
+
+	str = (char *)s;
+	while (n > 0)
+	{
+		*str++ = '\0';
+		n--;
+	}
+}
+
+static void iter_file_output(char **the_rest, char **temp, \
+    char **buf, int *ret, int fd)
+{
+    while(!ft_strchr(*the_rest, '\n'))
+    {
+        *ret = read(fd, *buf, BUFFER_SIZE);
+        if (*ret <= 0)
+            break ;
+        if(ft_strlen(*buf))
+        {
+            if(*the_rest)
+            {
+                *temp = ft_strjoin(*the_rest, *buf);
+                if(!*temp)
+                    return ;
+                free(*the_rest);
+                *the_rest = NULL;
+            }
+            else
+                *temp = ft_strdup(*buf);
+            *the_rest = *temp;
+            *temp = NULL;
+            ft_bzero(*buf, BUFFER_SIZE);
+        }
+    }
+}
+
+static void the_recipe(char **the_rest, char **temp, char **line, int ret)
+{
+    if ((*the_rest) && (ft_strchr(*the_rest, '\n') && \
+        ft_strchr(*the_rest, '\n') + 1))
+    {
+        *temp = *the_rest;
+        *the_rest = NULL;
+        *the_rest = ft_strdup((ft_strchr(*temp, '\n') + 1));
+        if (!*the_rest)
+            return ;
+        ft_bzero((ft_strchr(*temp, '\n') + 1), \
+            ft_strlen((ft_strchr(*temp, '\n') + 1)));
+        *line = ft_strdup(*temp);
+        if (!*line)
+            return ;
+        free(*temp);
+        *temp = NULL;
+    }
+    else if ((*the_rest) && ret == 0)
+    {
+        *line = *the_rest;
+        *the_rest = NULL;
+    }
+}
+
+char    *get_next_line(int fd)
+{
+    char    *buf;
     char *line;
     char *temp;
     static char *the_rest;
@@ -15,62 +90,9 @@ char *get_next_line(int fd)
         return (0);
     if (fd >= 0)
     {
-        while(!ft_strchr(the_rest, '\n'))
-        {
-            ret = read(fd, buf, BUFFER_SIZE);
-            if (ret <= 0)
-                break ;
-            if(ft_strlen(buf))
-            {
-                if(the_rest)
-                {
-                    temp = ft_strjoin(the_rest, buf);
-                    if(!temp)
-                        return (0);
-                    free(the_rest);
-                    the_rest = NULL;
-                }
-                else
-                    temp = ft_strdup(buf);
-                the_rest = ft_strdup(temp);
-                if(!the_rest)
-                    return (0);
-                free(temp);
-                temp = NULL;
-                ft_bzero(buf, BUFFER_SIZE);
-            }
-        }
-
-        if ((the_rest && the_rest[0] != '\0'))
-        {
-            if (ft_strchr(the_rest, '\n') && ft_strchr(the_rest, '\n') + 1)
-            {
-                temp = ft_strdup(the_rest);
-                if(!temp)
-                    return (0);
-                free(the_rest);
-                the_rest = NULL;
-                the_rest = ft_strdup((ft_strchr(temp, '\n') + 1));
-                if (!the_rest)
-                    return (0);
-                ft_bzero((ft_strchr(temp, '\n') + 1), ft_strlen((ft_strchr(temp, '\n') + 1)));
-                line = ft_strdup(temp);
-                if (!line)
-                    return (0);
-                free(temp);
-                temp = NULL;
-            }
-            else if (ret == 0)
-            {
-                line = ft_strdup(the_rest);
-                if (!line)
-                    return (0);
-                free(the_rest);
-                the_rest = NULL;
-            }
-        }
+        iter_file_output(&the_rest, &temp, &buf, &ret, fd);
+        the_recipe(&the_rest, &temp, &line, ret);
     }
-
     free (buf);
     return (line);
 }
