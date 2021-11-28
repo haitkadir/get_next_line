@@ -19,7 +19,7 @@ char *get_next_line(int fd)
     char *buf;
     char *line;
     char *temp;
-    static char *statiq;
+    static char *the_rest;
     int ret;
 
     temp = NULL;
@@ -27,7 +27,7 @@ char *get_next_line(int fd)
     buf = (char *)ft_calloc(BUFFER_SIZE + 1, sizeof(char));
     if (fd >= 0)
     {
-        while(!if_contean(statiq, '\n'))
+        while(!if_contean(the_rest, '\n'))
         {
             ret = read(fd, buf, BUFFER_SIZE);
             if (ret <= 0){
@@ -36,30 +36,30 @@ char *get_next_line(int fd)
 
             if(ft_strlen(buf))
             {
-                if(statiq)
+                if(the_rest)
                 {
-                    temp = ft_strjoin(statiq, buf);
-                    free(statiq);
-                    statiq = NULL;
+                    temp = ft_strjoin(the_rest, buf);
+                    free(the_rest);
+                    the_rest = NULL;
                 }
                 else{
                     temp = ft_strdup(buf);
                 }
-                statiq = ft_strdup(temp);
+                the_rest = ft_strdup(temp);
                 free(temp);
                 temp = NULL;
                 ft_bzero(buf, BUFFER_SIZE);
             }
         }
 
-        if ((statiq && statiq[0] != '\0'))
+        if ((the_rest && the_rest[0] != '\0'))
         {
-            if (if_contean(statiq, '\n') && ft_strchr(statiq, '\n') + 1)
+            if (if_contean(the_rest, '\n') && ft_strchr(the_rest, '\n') + 1)
             {
-                temp = ft_strdup(statiq);
-                free(statiq);
-                statiq = NULL;
-                statiq = ft_strdup((ft_strchr(temp, '\n') + 1));
+                temp = ft_strdup(the_rest);
+                free(the_rest);
+                the_rest = NULL;
+                the_rest = ft_strdup((ft_strchr(temp, '\n') + 1));
                 ft_bzero((ft_strchr(temp, '\n') + 1), \
                     ft_strlen((ft_strchr(temp, '\n') + 1)));
                 line = ft_strdup(temp);
@@ -68,9 +68,9 @@ char *get_next_line(int fd)
             }
             else if (ret == 0)
             {
-                line = ft_strdup(statiq);
-                free(statiq);
-                statiq = NULL;
+                line = ft_strdup(the_rest);
+                free(the_rest);
+                the_rest = NULL;
             }
         }
     }
