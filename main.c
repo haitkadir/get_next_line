@@ -9,13 +9,17 @@ int main(){
     // char *str1;
 
     fd = open("file.txt", O_RDONLY);
-    int i = 5;
-    // str = get_next_line(fd);
-    while(i--)
+    // int i = 2;
+
+    while(1)
     {
         str = get_next_line(fd);
-            printf("%s", str);
+        if(!str)
+            break;
+        else
+            printf(":%s:", str);
         free(str);
     }
+
     return (0);
 }
