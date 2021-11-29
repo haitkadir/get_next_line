@@ -9,14 +9,11 @@ int main(){
     // char *str1;
 
     fd = open("file.txt", O_RDONLY);
-    // int i = 10000000;
+    int i = 5;
     // str = get_next_line(fd);
-    while(1)
+    while(i--)
     {
         str = get_next_line(fd);
-        if (!str)
-            break;
-        else
             printf("%s", str);
         free(str);
     }
