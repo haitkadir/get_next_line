@@ -1,0 +1,2 @@
+the line of text file3.txt
+another line of txt file3.txt

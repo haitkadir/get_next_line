@@ -1,0 +1,2 @@
+the line of text file2.txt
+another line of txt file2.txt

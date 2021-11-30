@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line.c                                    :+::+:          :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: haitkadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/28 21:37:16 by haitkadi          #+#    #+#             */
-/*   Updated: 2021/11/28 21:37:21 by haitkadi         ###   ########.fr       */
+/*   Created: 2021/11/22 21:37:16 by haitkadi          #+#    #+#             */
+/*   Updated: 2021/11/22 21:37:21 by haitkadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "get_next_line.h"
@@ -64,13 +64,13 @@ static	void	the_recipe(char **the_rest, char **line)
 		temp = *line;
 		*line = 0;
 		*the_rest = ft_strdup(ft_strchr(temp, '\n') + 1);
-		if (!the_rest)
+		if (!*the_rest)
 			return ;
 		ft_bzero(ft_strchr(temp, '\n') + 1, \
 			ft_strlen((ft_strchr(temp, '\n') + 1)));
 		*line = ft_strdup(temp);
 		free(temp);
-		if (!line)
+		if (!*line)
 			return ;
 	}
 }

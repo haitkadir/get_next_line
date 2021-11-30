@@ -1,15 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: haitkadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/28 21:37:16 by haitkadi          #+#    #+#             */
-/*   Updated: 2021/11/28 21:37:21 by haitkadi         ###   ########.fr       */
+/*   Created: 2021/11/27 22:37:16 by haitkadi          #+#    #+#             */
+/*   Updated: 2021/11/27 22:37:21 by haitkadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void	ft_bzero(void *s, size_t n)
 {
@@ -70,7 +70,7 @@ static	void	the_recipe(char **the_rest, char **line, int fd)
 			ft_strlen((ft_strchr(temp, '\n') + 1)));
 		*line = ft_strdup(temp);
 		free(temp);
-		if (!line)
+		if (!*line)
 			return ;
 	}
 }
