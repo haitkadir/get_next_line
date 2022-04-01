@@ -1,2 +1,0 @@
-the line of text file.txt
-another line of txt file.txt
